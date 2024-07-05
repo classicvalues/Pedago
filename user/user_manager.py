@@ -1,53 +1,40 @@
-# pedago/user_manager.py
-
 from .user import User
+from .student_manager import StudentManager
+from .teacher_manager import TeacherManager
+from typing import List
 
 class UserManager:
     def __init__(self):
         self.users = {}
+        self.student_manager = StudentManager()
+        self.teacher_manager = TeacherManager()
 
-    def addUser(self, user_id: str, name: str, email: str, password: str, role: str) -> bool:
-        """Adds a new user."""
+    def addUser(self, user_id: str, user: User) -> bool:
+        """Adds a new user to the system."""
         if user_id not in self.users:
-            self.users[user_id] = User(user_id, name, email, password, role)
+            self.users[user_id] = user
+            if isinstance(user, Student):
+                self.student_manager.addStudent(user_id, user)
+            elif isinstance(user, Instructor):
+                self.teacher_manager.addTeacher(user_id, user)
             return True
         return False
 
-    def removeUser(self, user_id: str) -> bool:
-        """Removes a user."""
-        if user_id in self.users:
-            del self.users[user_id]
-            return True
-        return False
-
-    def updateUserDetails(self, user_id: str, name: str = None, email: str = None, password: str = None) -> bool:
+    def updateUserDetails(self, user_id: str, name: str = None, email: str = None) -> bool:
         """Updates user details."""
         if user_id in self.users:
             user = self.users[user_id]
             if name:
-                user.name = name
+                user.updateName(name)
             if email:
-                user.email = email
-            if password:
-                user.password = password
+                user.updateEmail(email)
             return True
         return False
 
-    def authenticateUser(self, email: str, password: str) -> bool:
-        """Authenticates user credentials."""
-        for user in self.users.values():
-            if user.email == email and user.password == password:
-                return True
-        return False
+    def getUser(self, user_id: str) -> User:
+        """Retrieves a user by their ID."""
+        return self.users.get(user_id, None)
 
-    def generateUserReport(self, user_id: str) -> dict:
-        """Generates a report for a user."""
-        if user_id in self.users:
-            user = self.users[user_id]
-            return {
-                "user_id": user.user_id,
-                "name": user.name,
-                "email": user.email,
-                "role": user.role
-            }
-        return {}
+    def listUsers(self) -> List[User]:
+        """Lists all users."""
+        return list(self.users.values())
