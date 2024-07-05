@@ -1,17 +1,32 @@
-from .user import TeacherManager  # Importing main implementations from user.py
+from .instructor import Instructor
+from typing import List
 
-class TeacherManagerWrapper:
+class TeacherManager:
     def __init__(self):
-        self.teacher_manager = TeacherManager()
+        self.teachers = {}
 
-    def addTeacher(self, teacher_id: str, name: str, email: str) -> bool:
-        return self.teacher_manager.addTeacher(teacher_id, name, email)
+    def addTeacher(self, teacher_id: str, teacher: Instructor) -> bool:
+        """Adds a new teacher to the system."""
+        if teacher_id not in self.teachers:
+            self.teachers[teacher_id] = teacher
+            return True
+        return False
 
-    def removeTeacher(self, teacher_id: str) -> bool:
-        return self.teacher_manager.removeTeacher(teacher_id)
+    def updateTeacherDetails(self, teacher_id: str, name: str = None, email: str = None) -> bool:
+        """Updates teacher details."""
+        if teacher_id in self.teachers:
+            teacher = self.teachers[teacher_id]
+            if name:
+                teacher.updateName(name)
+            if email:
+                teacher.updateEmail(email)
+            return True
+        return False
 
-    def getTeacher(self, teacher_id: str) -> dict:
-        return self.teacher_manager.getTeacher(teacher_id)
+    def getTeacher(self, teacher_id: str) -> Instructor:
+        """Retrieves a teacher by their ID."""
+        return self.teachers.get(teacher_id, None)
 
-    def listTeachers(self) -> List[dict]:
-        return self.teacher_manager.listTeachers()
+    def listTeachers(self) -> List[Instructor]:
+        """Lists all teachers."""
+        return list(self.teachers.values())
