@@ -1,5 +1,3 @@
-# pedago/course/course.py
-
 class Course:
     def __init__(self, course_id: str, instructor_id: str, title: str, description: str):
         self.course_id = course_id
@@ -19,13 +17,13 @@ class Course:
         self.description = description
 
     def addContent(self, content: str):
-        """Adds content to the course."""
-        self.syllabus += "\n" + content
+        """Adds content to course syllabus."""
+        self.syllabus += content
 
-    def removeContent(self, content: str):
-        """Removes content from the course."""
-        self.syllabus.replace(content, "")
+    def publishCourse(self):
+        """Publishes the course."""
+        self.status = "published"
 
-    def updateStatus(self, status: str):
-        """Updates course status."""
-        self.status = status
+    def archiveCourse(self):
+        """Archives the course."""
+        self.status = "archived"
