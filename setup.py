@@ -5,7 +5,9 @@ setup(
     version='0.1',
     packages=find_packages(),
     install_requires=[
-      #Example packages
+        'flask',
+        'flask-restful',
+        'flask-jwt-extended',
     ],
     entry_points={
         'console_scripts': [
